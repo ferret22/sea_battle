@@ -5,6 +5,8 @@ import random
 from colorama import Fore, Style
 from magic_file import do_cheat_code
 
+__author__ = 'Ferret22'
+
 
 def create_areas():  # Создаём игровые поля
     os.system('CLS')

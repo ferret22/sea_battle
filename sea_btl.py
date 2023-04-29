@@ -3,6 +3,8 @@ from colorama import Fore, init, Style
 
 init(autoreset=True)
 
+__author__ = 'Ferret22'
+
 emptiness = '*'
 chars = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К']
 shot = Fore.RED + 'X'

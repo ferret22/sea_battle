@@ -1,5 +1,7 @@
 from sea_btl import shot, ship
 
+__author__ = 'Ferret22'
+
 
 def do_cheat_code(code: str, status: str, area_plr: list[list[str]], area_ai: list[list[str]],
                   area_ai_view: list[list[str]]):
