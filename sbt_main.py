@@ -5,7 +5,7 @@ import random
 from colorama import Fore, Style
 
 
-def create_areas():
+def create_areas():  # Создаём игровые поля
     os.system('CLS')
     area_player = [[emptiness for _ in range(10)] + [str(i + 1)] for i in range(10)]
     area_ai = [[emptiness for _ in range(10)] + [str(i + 1)] for i in range(10)]
@@ -21,6 +21,7 @@ def create_areas():
     return area_player, area_ai, area_ai_view
 
 
+# Функция, которая отвечает за стрельбу игрока
 def player_shoot(ans: str, area_plr: list[list[str]], area_ai: list[list[str]], area_ai_view: list[list[str]]):
     if len(ans) >= 2:
         if ans[0].isdigit():
@@ -44,6 +45,7 @@ def player_shoot(ans: str, area_plr: list[list[str]], area_ai: list[list[str]], 
         print("Не возможно сделать выстрел!")
 
 
+# Функция повторной генерации
 def generate_area():
     n = '1'
     areas = None
@@ -54,6 +56,7 @@ def generate_area():
     return areas
 
 
+# Определяем за кем 1-й ход. 1 - игрок, 2 - ИИ
 def choose_first_step():
     num = random.randint(1, 2)
     if num == 1:
@@ -64,6 +67,7 @@ def choose_first_step():
         return num
 
 
+# Основной игровой цикл. Работает пока кто-то не выиграет. После чего выводит соответсвующее сообщение
 def game_cycle():
     os.system('CLS')
     areas = generate_area()
@@ -92,9 +96,10 @@ def game_cycle():
     else:
         print(Fore.RED + 'Вы проиграли!')
         print(Style.RESET_ALL)
-    n = input()
+    n = input()  # Нужна что-бы сразу после выигрыша/проигрыша, все поля не стёрлись
 
 
+# Функция старта игрового цикла
 def game_start():
     ans = input('Хотите начать? (1.ДА/2.НЕТ)' + Fore.GREEN + ' ')
     print(Style.RESET_ALL)

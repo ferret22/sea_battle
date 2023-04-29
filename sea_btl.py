@@ -14,6 +14,7 @@ t_ships = 2
 f_ships = 1
 
 
+# Отрисовка игрового поля в cmd
 def draw_area(area_plr: list[list[str]], area_ai_view: list[list[str]]):
     print()
     print('Ваше поле\t\t Поле противника')
@@ -23,6 +24,7 @@ def draw_area(area_plr: list[list[str]], area_ai_view: list[list[str]]):
     print()
 
 
+# Проверка является ли клетка кораблём или пустотой
 def check_to_shoot(idx1: int, idx2: int, area: list[list[str]]):
     cell = area[idx1][idx2]
     if cell == ship:
@@ -31,8 +33,9 @@ def check_to_shoot(idx1: int, idx2: int, area: list[list[str]]):
         return miss
 
 
+# Функция стрельбы ИИ
 def enemy_shoot(area_player: list[list[str]], area_shoot: list[list[int]], shoot_count: list[int]):
-    if shoot_count[0] != 0:
+    if shoot_count[0] != 0:  # Проверяет попадание до этого, и если да, то ищет максимальный вес
         id1, id2 = 0, 0
         for ars_shot in area_shoot:
             mx = max(ars_shot)
@@ -40,7 +43,7 @@ def enemy_shoot(area_player: list[list[str]], area_shoot: list[list[int]], shoot
                 id2 = ars_shot.index(mx)
                 id1 = area_shoot.index(ars_shot)
     else:
-        id1, id2 = rand_coord()
+        id1, id2 = rand_coord()  # Если попаданий не было, создаёт координаты случайно
 
     cell = check_to_shoot(id1, id2, area_player)
     print("Противник сходил: " + Fore.RED + chars[id2] + str(id1 + 1))
@@ -50,13 +53,13 @@ def enemy_shoot(area_player: list[list[str]], area_shoot: list[list[int]], shoot
         area_player[id1][id2] = cell
         shoot_count[0] = 0
 
-        for line in area_shoot:
-            while 50 in line:
+        for line in area_shoot:  # После уничтожения корабля нужно обнулять веса, но из-за того, что написано не
+            while 50 in line:  # Через классы работает не корректно. Позже перепишу на классах
                 idx1 = area_shoot.index(line)
                 idx2 = line.index(50)
                 area_shoot[idx1][idx2] = 1
 
-        if cell == shot:
+        if cell == shot:  # Увеличиваем соседние веса
             shoot_count[0] += 1
 
             if id1 != 0:
@@ -69,7 +72,7 @@ def enemy_shoot(area_player: list[list[str]], area_shoot: list[list[int]], shoot
                 area_shoot[id1][id2 + 1] *= 50
 
 
-def check_area(area: list):
+def check_area(area: list):  # Проверяем остались ли ещё живые корабли
     count = 0
     for ar in area:
         if ship in ar:
@@ -80,6 +83,7 @@ def check_area(area: list):
     return False
 
 
+# Функции shoot_first_num и shoot_second_num отвечают за ввод координат с цифры (10А), либо с буквы (Б8)
 def shoot_first_num(ans: str, area_ai: list[list[str]], area_ai_view: list[list[str]], idx: int):
     idx1 = int(ans[:idx]) - 1
     idx2 = chars.index(ans[idx].upper())
@@ -98,12 +102,13 @@ def shoot_second_num(ans: str, area_ai: list[list[str]], area_ai_view: list[list
         area_ai_view[idx1][idx2] = cell
 
 
-def rand_coord():
+def rand_coord():  # Создание случайных координат
     id1 = random.randint(0, 9)
     id2 = random.randint(0, 9)
     return id1, id2
 
 
+# Все функции check_crd... отвечают за проверку того, что случайно сгенерированные координаты являются кораблём
 def check_crd_d_ships(id1: tuple[int, int], id2: tuple[int, int]):
     if id1[0] - id2[0] == 0:
         if (id1[1] - id2[1] == 1) or (id1[1] - id2[1] == -1):
@@ -133,6 +138,8 @@ def check_crd_f_ships(id1: tuple[int, int], id2: tuple[int, int], id3: tuple[int
             return True
 
 
+# Проверка массовой матрицы. Участвует в расстановке кораблей. Корабль может стоять только на клетке с массой не
+# больше 1
 def check_mass_area(ids: tuple[int, int], area_mass: list[list[int]]):
     id1, id2 = ids[0], ids[1]
     if area_mass[id1][id2] == 1:
@@ -140,6 +147,7 @@ def check_mass_area(ids: tuple[int, int], area_mass: list[list[int]]):
     return False
 
 
+# Функция добавляет корабль на игровое поле + увеличивает веса для расстановки
 def stay_sharp(ids: tuple[int, int], area: list[list[str]], area_mass: list[list[int]]):
     id1 = ids[0]
     id2 = ids[1]
@@ -169,6 +177,7 @@ def stay_sharp(ids: tuple[int, int], area: list[list[str]], area_mass: list[list
             area_mass[id1 + 1][id2 + 1] += 1
 
 
+# Функции create_ships отвечают за создание кораблей на поле
 def create_o_ships(area: list[list[str]], area_mass: list[list[int]]):
     count = 0
     while count != o_ships:
