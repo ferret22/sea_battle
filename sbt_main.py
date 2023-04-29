@@ -3,6 +3,7 @@ from sea_btl import shoot_first_num, shoot_second_num, check_area
 import os
 import random
 from colorama import Fore, Style
+from magic_file import do_cheat_code
 
 
 def create_areas():  # Создаём игровые поля
@@ -23,37 +24,50 @@ def create_areas():  # Создаём игровые поля
 
 # Функция, которая отвечает за стрельбу игрока
 def player_shoot(ans: str, area_plr: list[list[str]], area_ai: list[list[str]], area_ai_view: list[list[str]]):
+    status = 'in_game'
+    ar_ai_view = do_cheat_code(ans, status, area_plr, area_ai, area_ai_view)
+    if ar_ai_view is None:
+        ar_ai_view = area_ai_view
+
     if len(ans) >= 2:
         if ans[0].isdigit():
             if ans[1].isdigit():
-                shoot_first_num(ans, area_ai, area_ai_view, 2)
-                draw_area(area_plr, area_ai_view)
+                shoot_first_num(ans, area_ai, ar_ai_view, 2)
+                draw_area(area_plr, ar_ai_view)
             else:
-                shoot_first_num(ans, area_ai, area_ai_view, 1)
-                draw_area(area_plr, area_ai_view)
+                shoot_first_num(ans, area_ai, ar_ai_view, 1)
+                draw_area(area_plr, ar_ai_view)
         elif ans[1].isdigit():
             if len(ans) == 3:
                 if ans[2].isdigit():
-                    shoot_second_num(ans, area_ai, area_ai_view)
-                    draw_area(area_plr, area_ai_view)
+                    shoot_second_num(ans, area_ai, ar_ai_view)
+                    draw_area(area_plr, ar_ai_view)
             else:
-                shoot_second_num(ans, area_ai, area_ai_view)
-                draw_area(area_plr, area_ai_view)
+                shoot_second_num(ans, area_ai, ar_ai_view)
+                draw_area(area_plr, ar_ai_view)
         else:
             print("Не возможно сделать выстрел!")
     else:
         print("Не возможно сделать выстрел!")
 
+    return ar_ai_view
+
 
 # Функция повторной генерации
 def generate_area():
     n = '1'
+    status = 'gen'
     areas = None
+    num = None
     while n == '1':
         areas = create_areas()
+
         n = input('Сгенерировать поля заново? (1.ДА/2.НЕТ):' + Fore.GREEN + ' ')
         print(Style.RESET_ALL)
-    return areas
+
+        num = do_cheat_code(n, status, areas[0], areas[1], areas[2])
+
+    return areas, num
 
 
 # Определяем за кем 1-й ход. 1 - игрок, 2 - ИИ
@@ -70,8 +84,11 @@ def choose_first_step():
 # Основной игровой цикл. Работает пока кто-то не выиграет. После чего выводит соответсвующее сообщение
 def game_cycle():
     os.system('CLS')
-    areas = generate_area()
-    num = choose_first_step()
+    areas, num = generate_area()
+    ar_view = areas[2]
+
+    if num is None:
+        num = choose_first_step()
 
     shoot_count = [0, 0]
     area_shoot_ai = [[1 for _ in range(10)] for _ in range(10)]
@@ -80,23 +97,40 @@ def game_cycle():
         if num == 1:
             ans = input('Введите координаты:' + Fore.GREEN + ' ')
             print(Style.RESET_ALL)
-            player_shoot(ans, areas[0], areas[1], areas[2])
-            enemy_shoot(areas[0], area_shoot_ai, shoot_count)
-            draw_area(areas[0], areas[2])
+            ar_view = player_shoot(ans, areas[0], areas[1], ar_view)
+
+            if check_area(areas[1]) is True:
+                enemy_shoot(areas[0], area_shoot_ai, shoot_count)
+            else:
+                break
+
+            if ar_view is None:
+                ar_view = areas[2]
+            draw_area(areas[0], ar_view)
+
         else:
             enemy_shoot(areas[0], area_shoot_ai, shoot_count)
-            draw_area(areas[0], areas[2])
+            if ar_view is None:
+                ar_view = areas[2]
+            draw_area(areas[0], ar_view)
+
+            if check_area(areas[0]) is not True:
+                break
+
             ans = input('Введите координаты:' + Fore.GREEN + ' ')
             print(Style.RESET_ALL)
-            player_shoot(ans, areas[0], areas[1], areas[2])
+            ar_view = player_shoot(ans, areas[0], areas[1], ar_view)
 
     if check_area(areas[0]):
         print(Fore.GREEN + 'Вы выиграли!')
         print(Style.RESET_ALL)
+        draw_area(areas[0], ar_view)
     else:
         print(Fore.RED + 'Вы проиграли!')
         print(Style.RESET_ALL)
-    n = input()  # Нужна что-бы сразу после выигрыша/проигрыша, все поля не стёрлись
+        draw_area(areas[0], ar_view)
+    n = input('Нажмите <Enter>, чтобы продолжить... ')  # Нужна что-бы сразу после выигрыша/проигрыша, все поля не
+    # стёрлись
 
 
 # Функция старта игрового цикла

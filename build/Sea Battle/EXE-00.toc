@@ -44,8 +44,8 @@
   ('sbt_main',
    'C:\\Users\\Arta\\PycharmProjects\\sea_battle\\sbt_main.py',
    'PYSOURCE'),
-  ('VCRUNTIME140.dll', 'C:\\MyProgram\\Python\\VCRUNTIME140.dll', 'BINARY'),
   ('python310.dll', 'C:\\MyProgram\\Python\\python310.dll', 'BINARY'),
+  ('VCRUNTIME140.dll', 'C:\\MyProgram\\Python\\VCRUNTIME140.dll', 'BINARY'),
   ('select', 'C:\\MyProgram\\Python\\DLLs\\select.pyd', 'EXTENSION'),
   ('unicodedata', 'C:\\MyProgram\\Python\\DLLs\\unicodedata.pyd', 'EXTENSION'),
   ('_socket', 'C:\\MyProgram\\Python\\DLLs\\_socket.pyd', 'EXTENSION'),
@@ -65,7 +65,7 @@
  [],
  False,
  False,
- 1682795757,
+ 1682806654,
  [('run.exe',
    'C:\\MyProgram\\Python\\lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit\\run.exe',
    'EXECUTABLE')])
