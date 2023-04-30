@@ -4,11 +4,13 @@ import os
 import random
 from colorama import Fore, Style
 from magic_file import do_cheat_code
+import time
 
 __author__ = 'Ferret22'
 
 
 def create_areas():  # Создаём игровые поля
+    t0 = time.process_time()
     os.system('CLS')
     area_player = [[emptiness for _ in range(10)] + [str(i + 1)] for i in range(10)]
     area_ai = [[emptiness for _ in range(10)] + [str(i + 1)] for i in range(10)]
@@ -21,6 +23,9 @@ def create_areas():  # Создаём игровые поля
     create_ships([area_player, area_ai], [area_mass_plr, area_mass_ai])
     print('Генерация завершена!')
     draw_area(area_player, area_ai_view)
+
+    t1 = time.process_time()
+    print(f"Time elapsed: {t1 - t0} sec.")
     return area_player, area_ai, area_ai_view
 
 
@@ -130,7 +135,7 @@ def game_cycle():
     else:
         print(Fore.RED + 'Вы проиграли!')
         print(Style.RESET_ALL)
-        draw_area(areas[0], ar_view)
+        draw_area(areas[0], areas[1])
     n = input('Нажмите <Enter>, чтобы продолжить... ')  # Нужна что-бы сразу после выигрыша/проигрыша, все поля не
     # стёрлись
 

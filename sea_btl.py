@@ -75,13 +75,9 @@ def enemy_shoot(area_player: list[list[str]], area_shoot: list[list[int]], shoot
 
 
 def check_area(area: list):  # Проверяем остались ли ещё живые корабли
-    count = 0
     for ar in area:
         if ship in ar:
-            count += 1
-
-    if count > 0:
-        return True
+            return True
     return False
 
 
