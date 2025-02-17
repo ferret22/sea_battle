@@ -67,12 +67,16 @@ def generate_area():
     areas = None
     num = None
     while n == '1':
-        areas = create_areas()
+        area_player, area_ai, area_ai_view = create_areas()
 
         n = input('Сгенерировать поля заново? (1.ДА/2.НЕТ):' + Fore.GREEN + ' ')
         print(Style.RESET_ALL)
 
-        num = do_cheat_code(n, status, areas[0], areas[1], areas[2])
+        num = do_cheat_code(n, status, area_player, area_ai, area_ai_view)
+        if num == 2:
+            num = None
+            area_ai_view = area_ai
+        areas = (area_player, area_ai, area_ai_view)
 
     return areas, num
 
