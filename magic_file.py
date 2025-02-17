@@ -23,7 +23,7 @@ def do_cheat_code(code: str, status: str, area_plr: list[list[str]], area_ai: li
         return 1
 
     if cheat_id == 3 and status_id == 1:
-        return area_ai
+        return 2
 
 
 def kill_me(area_plr: list[list[str]]):
